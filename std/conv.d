@@ -510,7 +510,9 @@ T toImpl(T, S)(S value)
             T opCast(U)() @safe pure { assert(false); }
         }
     }
-    to!(Test.T)(Test.S());
+    // std/conv.d(513): Warning: calling std.conv.to!(T).to!(S).to without side effects discards return value of type T, prepend a cast(void) if intentional
+    //to!(Test.T)(Test.S());
+    cast(void) to!(Test.T)(Test.S());
 
     // make sure std.conv.to is doing the same thing as initialization
     Test.S s;
@@ -1097,13 +1099,13 @@ if (is (T == immutable) && isExactSomeString!T && is(S == enum))
     auto s = to!string(b);
     assert(to!string(b) == "[1, 3, 5]", s);
 }
-/*@safe pure */unittest // sprintf issue
+/+@safe pure+/ unittest // sprintf issue
 {
     double[2] a = [ 1.5, 2.5 ];
     assert(to!string(a) == "[1.5, 2.5]");
 }
 
-/*@safe pure */unittest
+/+@safe pure+/ unittest
 {
     // Conversion representing associative array with string
     int[string] a = ["0":1, "1":2];
@@ -1479,7 +1481,7 @@ T toImpl(T, S)(S value)
                 ex ? ex.msg : "Exception was not thrown!");
     }
 }
-/*@safe pure */unittest
+/+@safe pure+/ unittest
 {
     auto b = [ 1.0f, 2, 3 ];
 
@@ -1512,7 +1514,7 @@ T toImpl(T, S)(S value)
     return cast(T)result;
 }
 
-@safe /*pure */unittest
+@safe /+pure+/ unittest
 {
     // hash to hash conversions
     int[string] a;
@@ -1521,7 +1523,7 @@ T toImpl(T, S)(S value)
     auto b = to!(double[dstring])(a);
     assert(b["0"d] == 1 && b["1"d] == 2);
 }
-@safe /*pure */unittest // Bugzilla 8705, from doc
+@safe /+pure+/ unittest // Bugzilla 8705, from doc
 {
     import std.exception;
     int[string][double[int[]]] a;
@@ -1683,7 +1685,7 @@ private void testFloatingToIntegral(Floating, Integral)()
         }
     }
 }
-/*@safe pure */unittest
+/+@safe pure+/ unittest
 {
     alias AllInts = TypeTuple!(byte, ubyte, short, ushort, int, uint, long, ulong);
     alias AllFloats = TypeTuple!(float, double, real);
@@ -4999,7 +5001,7 @@ pure nothrow @safe @nogc unittest
 }
 
 // Test attribute propagation for UDTs
-pure nothrow @safe /* @nogc */ unittest
+pure nothrow @safe /+@nogc+/ unittest
 {
     static struct Safe
     {

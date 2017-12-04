@@ -110,7 +110,7 @@ SRC_STD_1_HEAVY= std\stdio.d std\stdiobase.d \
 
 SRC_STD_2a_HEAVY= std\array.d std\functional.d std\path.d std\outbuffer.d std\utf.d
 
-SRC_STD_3= std\csv.d std\math.d std\complex.d std\numeric.d std\bigint.d \
+SRC_STD_3= std\math.d std\complex.d std\numeric.d std\bigint.d \
 	std\bitmanip.d std\typecons.d \
 	std\uni.d std\base64.d std\ascii.d \
 	std\demangle.d std\uri.d std\metastrings.d std\mmfile.d std\getopt.d
@@ -147,7 +147,7 @@ SRC_STD_LOGGER= std\experimental\logger\core.d std\experimental\logger\filelogge
 
 SRC_STD_6= std\variant.d \
 	std\syserror.d std\zlib.d \
-	std\stream.d std\socket.d std\socketstream.d \
+	std\socket.d std\socketstream.d \
 	std\conv.d std\zip.d std\cstream.d \
 	$(SRC_STD_CONTAINER) $(SRC_STD_LOGGER)
 
@@ -165,11 +165,11 @@ SRC=	unittest.d index.d
 
 SRC_STD= std\zlib.d std\zip.d std\stdint.d std\conv.d std\utf.d std\uri.d \
 	std\math.d std\string.d std\path.d std\datetime.d \
-	std\csv.d std\file.d std\compiler.d std\system.d \
+	std\file.d std\compiler.d std\system.d \
 	std\outbuffer.d std\base64.d \
 	std\meta.d std\metastrings.d std\mmfile.d \
 	std\syserror.d \
-	std\random.d std\stream.d std\process.d \
+	std\random.d std\process.d \
 	std\socket.d std\socketstream.d std\format.d \
 	std\stdio.d std\uni.d std\uuid.d \
 	std\cstream.d std\demangle.d \
@@ -208,6 +208,8 @@ SRC_STD_C_LINUX= std\c\linux\linux.d \
 SRC_STD_C_OSX= std\c\osx\socket.d
 
 SRC_STD_C_FREEBSD= std\c\freebsd\socket.d
+
+SRC_STD_C_DRAGONFLYBSD= std\c\dragonflybsd\socket.d
 
 SRC_STD_INTERNAL= std\internal\cstring.d std\internal\processinit.d \
 	std\internal\unicode_tables.d std\internal\unicode_comp.d std\internal\unicode_decomp.d \
@@ -330,7 +332,6 @@ DOCS=	$(DOC)\object.html \
 	$(DOC)\std_digest_ripemd.html \
 	$(DOC)\std_digest_digest.html \
 	$(DOC)\std_cstream.html \
-	$(DOC)\std_csv.html \
 	$(DOC)\std_datetime.html \
 	$(DOC)\std_demangle.html \
 	$(DOC)\std_encoding.html \
@@ -359,7 +360,6 @@ DOCS=	$(DOC)\object.html \
 	$(DOC)\std_socketstream.html \
 	$(DOC)\std_stdint.html \
 	$(DOC)\std_stdio.html \
-	$(DOC)\std_stream.html \
 	$(DOC)\std_string.html \
 	$(DOC)\std_system.html \
 	$(DOC)\std_traits.html \
@@ -458,7 +458,6 @@ cov : $(SRC_TO_COMPILE) $(LIB)
 	$(DMD) -conf= -cov=96 -unittest -main -run std\path.d
 	$(DMD) -conf= -cov=41 -unittest -main -run std\outbuffer.d
 	$(DMD) -conf= -cov=89 -unittest -main -run std\utf.d
-	$(DMD) -conf= -cov=93 -unittest -main -run std\csv.d
 	$(DMD) -conf= -cov=91 -unittest -main -run std\math.d
 	$(DMD) -conf= -cov=95 -unittest -main -run std\complex.d
 	$(DMD) -conf= -cov=70 -unittest -main -run std\numeric.d
@@ -498,7 +497,6 @@ cov : $(SRC_TO_COMPILE) $(LIB)
 	$(DMD) -conf= -cov=83 -unittest -main -run std\variant.d
 	$(DMD) -conf= -cov=0  -unittest -main -run std\syserror.d
 	$(DMD) -conf= -cov=58 -unittest -main -run std\zlib.d
-	$(DMD) -conf= -cov=54 -unittest -main -run std\stream.d
 	$(DMD) -conf= -cov=53 -unittest -main -run std\socket.d
 	$(DMD) -conf= -cov=0  -unittest -main -run std\socketstream.d
 	$(DMD) -conf= -cov=95 -unittest -main -run std\container\array.d
@@ -676,9 +674,6 @@ $(DOC)\std_range_interfaces.html : $(STDDOC) std\range\interfaces.d
 $(DOC)\std_cstream.html : $(STDDOC) std\cstream.d
 	$(DMD) -c -o- $(DDOCFLAGS) -Df$(DOC)\std_cstream.html $(STDDOC) std\cstream.d
 
-$(DOC)\std_csv.html : $(STDDOC) std\csv.d
-	$(DMD) -c -o- $(DFLAGS) -Df$(DOC)\std_csv.html $(STDDOC) std\csv.d
-
 $(DOC)\std_datetime.html : $(STDDOC) std\datetime.d
 	$(DMD) -c -o- $(DDOCFLAGS) -Df$(DOC)\std_datetime.html $(STDDOC) std\datetime.d
 
@@ -753,9 +748,6 @@ $(DOC)\std_stdint.html : $(STDDOC) std\stdint.d
 
 $(DOC)\std_stdio.html : $(STDDOC) std\stdio.d
 	$(DMD) -c -o- $(DDOCFLAGS) -Df$(DOC)\std_stdio.html $(STDDOC) std\stdio.d
-
-$(DOC)\std_stream.html : $(STDDOC) std\stream.d
-	$(DMD) -c -o- $(DDOCFLAGS) -Df$(DOC)\std_stream.html $(STDDOC) std\stream.d
 
 $(DOC)\std_string.html : $(STDDOC) std\string.d
 	$(DMD) -c -o- $(DDOCFLAGS) -Df$(DOC)\std_string.html $(STDDOC) std\string.d
@@ -899,7 +891,7 @@ $(DOC)\etc_c_odbc_sql.html : $(STDDOC) etc\c\odbc\sql.d
 
 zip : win32.mak win64.mak posix.mak osmodel.mak $(STDDOC) $(SRC) \
 	$(SRC_STD) $(SRC_STD_C) $(SRC_STD_WIN) \
-	$(SRC_STD_C_WIN) $(SRC_STD_C_LINUX) $(SRC_STD_C_OSX) $(SRC_STD_C_FREEBSD) \
+	$(SRC_STD_C_WIN) $(SRC_STD_C_LINUX) $(SRC_STD_C_OSX) $(SRC_STD_C_FREEBSD) $(SRC_STD_C_DRAGONFLYBSD)\
 	$(SRC_ETC) $(SRC_ETC_C) $(SRC_ZLIB) $(SRC_STD_NET) $(SRC_STD_DIGEST) $(SRC_STD_CONTAINER) \
 	$(SRC_STD_INTERNAL) $(SRC_STD_INTERNAL_DIGEST) $(SRC_STD_INTERNAL_MATH) \
 	$(SRC_STD_INTERNAL_WINDOWS) $(SRC_STD_REGEX) $(SRC_STD_RANGE) $(SRC_STD_ALGO) \
@@ -914,6 +906,7 @@ zip : win32.mak win64.mak posix.mak osmodel.mak $(STDDOC) $(SRC) \
 	zip32 -u phobos $(SRC_STD_C_LINUX)
 	zip32 -u phobos $(SRC_STD_C_OSX)
 	zip32 -u phobos $(SRC_STD_C_FREEBSD)
+	zip32 -u phobos $(SRC_STD_C_DRAGONFLYBSD)
 	zip32 -u phobos $(SRC_STD_INTERNAL)
 	zip32 -u phobos $(SRC_STD_INTERNAL_DIGEST)
 	zip32 -u phobos $(SRC_STD_INTERNAL_MATH)
