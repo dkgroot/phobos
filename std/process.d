@@ -1452,7 +1452,8 @@ void kill(Pid pid, int codeOrSignal)
     else version (Posix)
     {
         import core.sys.posix.signal;
-        if (kill(pid.osHandle, codeOrSignal) == -1)
+        //if (kill(pid.osHandle, codeOrSignal) == -1)
+        if (core.sys.posix.signal.kill(pid.osHandle, codeOrSignal) == -1)
             throw ProcessException.newFromErrno();
     }
 }

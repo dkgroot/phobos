@@ -12,8 +12,8 @@ ifeq (,$(OS))
   ifeq (FreeBSD,$(uname_S))
     OS:=freebsd
   endif
-  ifeq (OpenBSD,$(uname_S))
-    OS:=openbsd
+  ifeq (DragonFly,$(uname_S))
+    OS:=dragonflybsd
   endif
   ifeq (Solaris,$(uname_S))
     OS:=solaris

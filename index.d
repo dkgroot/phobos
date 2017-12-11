@@ -61,7 +61,6 @@ $(BOOKTABLE ,
     $(TR
         $(TD
             $(LINK2 std_base64.html, std.base64)$(BR)
-            $(LINK2 std_csv.html, std.csv)$(BR)
             $(LINK2 std_json.html, std.json)$(BR)
             $(LINK2 std_xml.html, std.xml)$(BR)
             $(LINK2 std_zip.html, std.zip)$(BR)

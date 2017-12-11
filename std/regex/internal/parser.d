@@ -1439,6 +1439,7 @@ struct Parser(R)
 {//@@@BUG@@@ write is @system
     with(zis)
     {
+        import std.regex.internal.kickstart;
         struct FixedStack(T)
         {
             T[] arr;

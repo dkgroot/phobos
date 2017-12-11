@@ -104,10 +104,14 @@ endif
 
 # Set DFLAGS
 DFLAGS=-conf= -I$(DRUNTIME_PATH)/import $(DMDEXTRAFLAGS) -w -dip25 $(MODEL_FLAG) $(PIC)
+
+# silently allow deprecated features (-d) for dmd-cxx, as this version is deprecated anyway
 ifeq ($(BUILD),debug)
-	DFLAGS += -g -debug
+	# DFLAGS += -gc -g -debug
+	DFLAGS += -gc -g -debug -d
 else
-	DFLAGS += -O -release
+	# DFLAGS += -O -release
+	DFLAGS += -O -release -d
 endif
 
 # Set DOTOBJ and DOTEXE
@@ -157,7 +161,7 @@ STD_PACKAGES = $(addprefix std/, algorithm container experimental/logger \
 STD_MODULES = $(addprefix std/, \
   array ascii base64 bigint bitmanip compiler complex concurrency \
   $(addprefix container/, array binaryheap dlist rbtree slist util) \
-  conv cstream csv datetime demangle \
+  conv cstream datetime demangle \
   $(addprefix digest/, digest crc md ripemd sha) \
   encoding exception \
   $(addprefix experimental/logger/, core filelogger nulllogger multilogger) \
@@ -167,7 +171,7 @@ STD_MODULES = $(addprefix std/, \
   $(addprefix range/, primitives interfaces) \
   $(addprefix regex/, $(addprefix internal/,generator ir parser backtracking \
   	kickstart tests thompson)) \
-  signals socket socketstream stdint stdio stdiobase stream \
+  signals socket socketstream stdint stdio stdiobase \
   string syserror system traits typecons typetuple uni uri utf uuid variant \
   xml zip zlib $(addprefix algorithm/,comparison iteration \
     mutation searching setops sorting))
@@ -176,6 +180,7 @@ STD_MODULES = $(addprefix std/, \
 EXTRA_MODULES_LINUX := $(addprefix std/c/linux/, linux socket)
 EXTRA_MODULES_OSX := $(addprefix std/c/osx/, socket)
 EXTRA_MODULES_FREEBSD := $(addprefix std/c/freebsd/, socket)
+EXTRA_MODULES_DRAGONFLYBSD := $(addprefix std/c/dragonflybsd/, socket)
 EXTRA_MODULES_WIN32 := $(addprefix std/c/windows/, com stat windows		\
 		winsock) $(addprefix std/windows/, charset iunknown syserror)
 ifeq (,$(findstring win,$(OS)))
@@ -205,7 +210,7 @@ D_MODULES = $(STD_MODULES) $(EXTRA_MODULES) \
 D_FILES = $(addsuffix .d,$(D_MODULES))
 # Aggregate all D modules over all OSs (this is for the zip file)
 ALL_D_FILES = $(addsuffix .d, $(D_MODULES) \
-  $(EXTRA_MODULES_LINUX) $(EXTRA_MODULES_OSX) $(EXTRA_MODULES_FREEBSD) \
+  $(EXTRA_MODULES_LINUX) $(EXTRA_MODULES_OSX) $(EXTRA_MODULES_FREEBSD) $(EXTRA_MODULES_DRAGONFLYBSD) \
   $(EXTRA_MODULES_WIN32)) std/internal/windows/advapi32.d \
   std/windows/registry.d std/c/linux/pthread.d std/c/linux/termios.d \
   std/c/linux/tipc.d
